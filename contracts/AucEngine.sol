@@ -33,7 +33,7 @@ contract AucEngine {
 
     require(_startingPrice >= _discountRate * duration, "incorect starting price");
 
-    Auction memory newAction = Auction({
+    Auction memory newAuction = Auction({
       seller: payable(msg.sender),
       startingPrice: _startingPrice,
       finalPrice: _startingPrice,
@@ -57,8 +57,13 @@ contract AucEngine {
     return cAuction.startingPrice - discount;
   }
 
+  // function stop(uint index) {
+  //   Auction storage cAuction = auctions[index];
+  //   cAuction.stopped = true;
+  // }
+
   function buy(uint index) external payable {
-    Auction memory cAuction = auctions[index];
+    Auction storage cAuction = auctions[index];
     require(!cAuction.stopped, "stopped!");
     require(block.timestamp < cAuction.endsAt, "ended");
     uint cPrice = getPriceFor(index);

@@ -1,5 +1,6 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomiclabs/hardhat-ethers");
+require("solidity-coverage");
 require('dotenv').config();
 
 task("account", "Prints the list of accounts", async (taskArgs, hre) => {

@@ -12,7 +12,7 @@ contract AucEngine {
     uint finalPrice;
     uint startAt;
     uint endsAt;
-    uint discountRate; 
+    uint discountRate;
     string item;
     bool stopped;
   }
@@ -27,11 +27,14 @@ contract AucEngine {
   }
 
   function createAuction(
-    uint _startingPrice, uint _discountRate, string calldata _item, uint _duration
+    uint _startingPrice, 
+    uint _discountRate,
+    string calldata _item,
+    uint _duration 
   ) external {
     uint duration = _duration == 0 ? DURATION : _duration;
 
-    require(_startingPrice >= _discountRate * duration, "incorect starting price");
+    require(_startingPrice >= _discountRate * duration, "incorrect starting price");
 
     Auction memory newAuction = Auction({
       seller: payable(msg.sender),
@@ -41,7 +44,7 @@ contract AucEngine {
       startAt: block.timestamp,
       endsAt: block.timestamp + duration,
       item: _item,
-      stopped: false  
+      stopped: false
     });
 
     auctions.push(newAuction);
@@ -57,29 +60,29 @@ contract AucEngine {
     return cAuction.startingPrice - discount;
   }
 
-  // function stop(uint index) {
-  //   Auction storage cAuction = auctions[index];
-  //   cAuction.stopped = true;
-  // }
+  function stop(uint index) public {
+    Auction storage cAuction = auctions[index];
+    cAuction.stopped = true;
+  }
 
   function buy(uint index) external payable {
     Auction storage cAuction = auctions[index];
     require(!cAuction.stopped, "stopped!");
-    require(block.timestamp < cAuction.endsAt, "ended");
+    require(block.timestamp < cAuction.endsAt, "ended!"); 
     uint cPrice = getPriceFor(index);
     require(msg.value >= cPrice, "not enough funds!");
     cAuction.stopped = true;
     cAuction.finalPrice = cPrice;
-    uint refund= msg.value - cPrice;
-      
-    if(refund > 0){
+    uint refund = msg.value - cPrice;
+
+    if (refund > 0) {
       payable(msg.sender).transfer(refund);
     }
-
-    cAuction.seller.transfer(
-      cPrice - ((cPrice * FEE) / 100)
-    );
+    
+    cAuction.seller.transfer(cPrice - ((cPrice * FEE) / 100));
 
     emit AuctionEnded(index, cPrice, msg.sender);
   }
+
+
 }

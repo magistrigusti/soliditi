@@ -45,7 +45,7 @@ contract ERC20 is IERC20 {
     _name = name_;
     _symbol = symbol_;
     owner = msg.sender;
-    mint(initialSuplyy, shop);
+    mint(initialSupply, shop);
   }
 
   function balanceOf(address account) public view returns(uint) {
@@ -58,7 +58,7 @@ contract ERC20 is IERC20 {
     ) external enoughTokens(msg.sender, amount) {
     _beforeTokenTransfer(msg.sender, to, amount);  
     balances[msg.sender] -= amount;
-    balance[to] += amount;
+    balances[to] += amount;
     emit Transfer(msg.sender, to, amount);
   }
  
@@ -110,7 +110,7 @@ contract ERC20 is IERC20 {
     address from,
     address to,
     uint amount
-  ) internal virual {
+  ) internal virtual {
 
   }
 }
@@ -138,26 +138,31 @@ contract MGShop {
   function sell(uint _amountToSell) external {
     require(
       _amountToSell > 0 &&
-      tokenbalanceOf(msg.sender) >= _amountToSell,
+      token.balanceOf(msg.sender) >= _amountToSell,
       "incorrect amount!"
     );
 
     uint allowance = token.allowance(msg.sender, address(this));
     require(allowance >= _amountToSell, "check allowance!");
 
-    token.transferFrom(msg.sender, address(this), _mountToSell );
+    token.transferFrom(msg.sender, address(this), _amountToSell );
 
-    payable
+    payable(msg.sender).transfer(_amountToSell);
+
+    emit Sold(_amountToSell, msg.sender);
   }
 
-  receive() external payable [
+  receive() external payable {
     uint tokensToBuy = msg.value;
     require(tokensToBuy > 0, "not enough funds");
 
-    uint currentBalance = tokenBalance();
-    require(currentBalance >= tokensToBuy, "not enough tokens");
+    require(tokenBalance >= tokensToBuy, "not enough tokens");
 
     token.transfer(msg.sender, tokensToBuy);
     emit Bought(tokensToBuy, msg.sender);
-  ]
+  }
+
+  function tokenBalance() public view returns(uint) {
+    return token.balanceOf(address(this));
+  }
 }

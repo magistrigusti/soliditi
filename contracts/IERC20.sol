@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.27;
 
-interfase IERC20 {
+interface IERC20 {
   function name() external view returns(string memory);
 
   function symbol() external view returns(string memory);
 
   function decimals() external pure returns(uint);
 
-  function totalPupply() extrnal view returns(uint);
+  function totalPupply() external view returns(uint);
 
   function balanceOf(address account) external view returns(uint);
 
@@ -20,7 +20,7 @@ interfase IERC20 {
 
   function transferFrom(address sender, address recipier, uint amount) external;
   
-  event Transver(address indexed from, address indexed to, uint amount);
+  event Transfer(address indexed from, address indexed to, uint amount);
 
   event Approve(address indexed owner, address indexed to, uint amount);
-};
+}

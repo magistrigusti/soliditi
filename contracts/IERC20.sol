@@ -1,26 +1,15 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.27;
-
 interface IERC20 {
-  function name() external view returns(string memory);
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address recipient, uint256 amount) external returns (bool);
+    function allowance(address owner, address spender) external view returns (uint256);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    function symbol() external view returns (string memory);
+    function totalPupply() external view returns (uint);
 
-  function symbol() external view returns(string memory);
-
-  function decimals() external pure returns(uint);
-
-  function totalPupply() external view returns(uint);
-
-  function balanceOf(address account) external view returns(uint);
-
-  function transfer(address to, uint amount) external;
-
-  function allowance(address _owner, address spender) external view returns(uint);
-
-  function approve(address spender, uint amount) external;
-
-  function transferFrom(address sender, address recipier, uint amount) external;
-  
-  event Transfer(address indexed from, address indexed to, uint amount);
-
-  event Approve(address indexed owner, address indexed to, uint amount);
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
 }

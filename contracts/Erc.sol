@@ -14,7 +14,7 @@ contract ERC20 is IERC20 {
     return _name;
   }
 
-  function _symbol() external view returns(string memory) {
+  function symbol() external view returns(string memory) {
     return _symbol;
   }
 
@@ -75,22 +75,18 @@ contract ERC20 is IERC20 {
     totalTokens -= amount;
   }
 
-  function allowance(address _owner, address spender) public view returns(uint) {
-    return allowances[_owner][spender];
-  }
+   function allowance(address _owner, address spender) public view returns(uint) {
+        return allowances[_owner][spender];
+    }
+    
+    function approve(address spender, uint amount) public {
+        _approve(msg.sender, spender, amount);
+    }
 
-  function approve(address spender, uint amount) public {
-    _approve(msg.sender, spender, amount);
-  }
-
-  function _approve(
-    address sender, 
-    address spender, 
-    uint amount
-    ) internal virtual {
-      allowances[sender][spender] = amount;
-      emit Approve(sender, spender, amount);
-  }
+    function _approve(address sender, address spender, uint amount) internal virtual {
+        allowances[sender][spender] = amount;
+        emit Approve(sender, spender, amount);
+    }
 
   function transferFrom(
     address sender,

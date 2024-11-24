@@ -1,6 +1,6 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
-const tokenJSON = require("../artifacts/contracts/AucEngine.sol/AucEngine.dbg.json");
+const tokenJSON = require("../../artifacts/contracts/AucEngine.sol/AucEngine.dbg.json");
 
 describe("MGShop", function() {
   let owner;

@@ -42,21 +42,21 @@ abstract contract ERC20 is IERC20, IERC20Metadata, IERC20Errors {
     }
 
     function transfer(address to, uint256 value) public virtual returns (bool) {
-        address owner = _msgSender();
-        _transfer(owner, to, value);
+        // address owner = _msgSender();
+        // _transfer(owner, to, value);
         return true;
     }
 
     function approve(address spender, uint256 value) public virtual returns (bool) {
-        address owner = _msgSender();
-        _approve(owner, spender, value);
+        // address owner = _msgSender();
+        // _approve(owner, spender, value);
         return true;
     }
 
     function transferFrom(address from, address to, uint256 value) public virtual returns (bool) {
-        address spender = _msgSender();
-        _spendAllowance(from, spender, value);
-        _transfer(from, to, value);
+        // address spender = _msgSender();
+        // _spendAllowance(from, spender, value);
+        // _transfer(from, to, value);
         return true;
     }
 

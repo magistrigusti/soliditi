@@ -3,15 +3,24 @@ pragma solidity ^0.8.20;
 
 contract ReentrancyAuction {
   mapping(address => uint) public bidders;
+  bool locked;
 
   function bid() external payable {
     bidders[msg.sender] += msg.value;
   }
 
+  // modifier NoReentrancy() {
+  //   require(!locked, "no reentrancy!");
+  //   loked = true;
+  //   _;
+  //   locked = false;
+  // }
+
   function refund() external {
     uint refundAmount = bidders[msg.sender];
 
     if (refundAmount > 0) {
+      // bidders[msg.sender] = 0;
       (bool success, ) = msg.sender.call{value: refundAmount}("");
 
       require(success, "failed!");
@@ -43,7 +52,7 @@ contract ReentrancyAttack {
   }
 
   receive() external payable {
-    if(auction.currentBalance() > BID_AMOUNT) {
+    if(auction.currentBalance() >= BID_AMOUNT) {
       auction.refund();
     }
    

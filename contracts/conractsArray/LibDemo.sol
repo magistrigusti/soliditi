@@ -13,7 +13,7 @@ contract LibDemo {
       return numbers.inArray(number);
     }
 
-  function runnerStr( string memory str1, string memory str2) publuc pure returns(bool) {
-    return  str1.eq(str2);
-  }
+  // function runnerStr( string memory str1, string memory str2) publuc pure returns(bool) {
+  //   return  str1.eq(str2);
+  // }
 }

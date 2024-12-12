@@ -17,6 +17,6 @@ contract Hack {
   }
 
   receive() external payable {
-    _toHack.refund();
+    // _toHack.refund();
   }
 }

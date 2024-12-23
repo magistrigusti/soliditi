@@ -2,7 +2,7 @@
 pragma solidity ^0.8.22;
 
 import "./ERC721.sol";
-import "./ERC721Enumerable.sol";
+import "./IERC721Enumerable.sol";
 import "./ERC721URIStorage.sol";
 
 contract MyToken is ERC721URIStorage {
@@ -24,7 +24,7 @@ contract MyToken is ERC721URIStorage {
 
   function supportsInterface(bytes4 interfaceId)
     public view 
-    ovveride(ERC721, ERC721Enumerable)
+    override(ERC721, ERC721Enumerable)
     returns (bool) 
   {
     return super.supportsInterface(interfaceId);

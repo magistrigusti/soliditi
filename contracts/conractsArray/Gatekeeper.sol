@@ -40,7 +40,7 @@ contract Proxy {
     bytes8 key;
 
     unchecked {
-      key = uint64(bytes8(keccak256(abi.encodePacked(address(this))))) ^ uint64(0) - 1
+      key = uint64(bytes8(keccak256(abi.encodePacked(address(this))))) ^ uint64(0) - 1;
     }
 
     _gates.enter(key);

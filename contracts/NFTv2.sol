@@ -5,8 +5,8 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
-import "@openzepplin/contracts-upradeable/utils/CountersUpgradeable.sol";
+// import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 contract MyTokenV2 is 
   Initializable, 
@@ -15,8 +15,8 @@ contract MyTokenV2 is
   OwnableUpgradeable,
   UUPSUpgradeable 
 {
-    using CounterUpgradeable for CountersUpgradeable.Counter;
-    countersUpgraeable.Counter private _tokenCounter;
+    using CountersUpgradeable for CountersUpgradeable.Counter;
+    CountersUpgradeable.Counter private _tokenCounter;
 
     function initialize() initializer public {
       __ERC721_init("MyToken", "MTK");
@@ -26,25 +26,23 @@ contract MyTokenV2 is
     }
 
     function safeMint(address to, string memory uri) public onlyOwner {
-      uint256 tokenId = _nextTokenId++;
+      uint256 tokenId = _tokenCounter.current();
+      _tokenCounter.increment();
       _safeMint(to, tokenId);
-      _satTokenURI(tokenId, uri);
+      _setTokenURI(tokenId, uri);
     }
 
-    function demo() external pure returns(bool) {
+    function demo() external pure returns (bool) {
       return true;
     }
 
-    function _burn(uint256 tokenId) internal override(
-      ERC721Upgradeable,
-      ERC721URIStorageUpgradeable
-    ) {
+    function _burn(uint256 tokenId) internal override(ERC721Upgradeable, ERC721URIStorageUpgradeable) {
       super._burn(tokenId);
     }
 
     function tokenURI(uint256 tokenId)
       public view
-      override(ERC721Upgradeable ERC721URIStorageUpgradeable)
+      override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
       returns (string memory)
     {
       return super.tokenURI(tokenId);
@@ -52,15 +50,17 @@ contract MyTokenV2 is
 
     function supportsInterface(bytes4 interfaceId)
       public view
-      override(ERC721, ERC721URIStorage)
+      override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
       returns (bool)
     {
       return super.supportsInterface(interfaceId);
     }
 
     function _authorizeUpgrade(address newImplementation)
-      internal onlyOwner override 
+      internal 
+      onlyOwner 
+      override 
     {
-
     }
 }
+

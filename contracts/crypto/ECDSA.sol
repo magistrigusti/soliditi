@@ -78,7 +78,7 @@ library ECDSA {
       }
   }
 
-  function toEthSignedMessageHash(bytes memorys s) internal pure returns (bytes32) {
+  function toEthSignedMessageHash(bytes memory s) internal pure returns (bytes32) {
     return keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n",
     Strings.toString(s.length), s));
   }
@@ -96,8 +96,8 @@ library ECDSA {
     function toDataWithIntendedValidatorHash(address validator, bytes memory data)
       internalpure returns (bytes32) {
         return keccak256(
-          abi.encodePacked("\x19\x00", validator, data);
-        )
+          abi.encodePacked("\x19\x00", validator, data)
+        );
       }
 
 }

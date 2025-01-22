@@ -99,7 +99,76 @@ abstract contract ERC4626 is ERC20, IERC4626 {
   ) puiblic virtual returns(uint) {
     require(assets <= maxWithdraw(owner));
     uint shares = previewWithraw(assets);
-    _withdraw()
+    _withdraw(msg.sender, receiver, owner, assets, shares);
+
+    return shares;
+  }
+
+  function redeem(
+    uint shares,
+    address receiver,
+    addres owner
+  ) public virtual returns(uint) {
+    require(shaes <= maxRedeem(owner));
+    uint assets = previewRedeem(shares);
+    _withdraw(msg.sender, receiver, owner, assets, shares);
+
+    return assets;
+  }
+
+  function _deposit(
+    address caller,
+    address receiver,
+    uint assets,
+    uint shares
+  ) internal virtual {
+    _asset.transferFrom(caller, address(this), assets);
+    _mint(receiver, shares);
+
+    emit Deposit(caller, receiver, assets, shares);
+  }
+
+  function _withdraw(
+    address caller,
+    address receiver,
+    address owner, 
+    uint assets,
+    uint shares
+  ) internal virtual {
+    if(caller != owner) {
+      _spndAllowance(owner, caller, shares);
+    }
+
+    _burn(owner, shares);
+    _assets.transfer(receiver, assets);
+    emit Withdraw(caller, receiver, owner, assets, shares); 
+  }
+
+  function _convertToShares(
+    uint assets, 
+    Math.Rounding rounding
+  ) internal view virtual returns(uint) {
+    // (assets * totalSupply) / totlalAssets
+    return assets.mulDiv(
+      totalSupply() + 10 ** _decimalOffset(),
+      totalAssets() + 1,
+      rounding
+    );
+  }
+
+  function _convertToAssets(
+    uint shares,
+    Math.Rounding rounding
+  ) internal view virtual returns(uint) {
+    return shares.mulDiv(
+      totalAssets() + 1,
+      totalSupply() + 10 ** _decimalOffset(),
+      rounding
+    );
+  }
+
+  function _decimalOffset() internal view virtual returns(uint8) {
+    return 0;
   }
 
 }

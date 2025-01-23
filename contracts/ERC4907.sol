@@ -50,6 +50,12 @@ contract ERC4907 is ERC721, IERC4907 {
     uint batchSize
   ) internal virtual override {
     super._beforeTokenTransfer(from, to, tokenId, batchSize);
+
+    if(from != to && _users[tokenId].user != address(0)) {
+      delete _users[tokenId];
+
+      emit UpdateUsers(tokenId, address(0), 0);
+    }
   }
 
 }

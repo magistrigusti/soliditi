@@ -1,4 +1,4 @@
-import { loadFixture, ethers, expect } from "/setup";
+import { loadFixture, ethers, expect } from "./setup.ts";
 
 describe("Auction", function() {
   async function deploy() {
@@ -8,17 +8,25 @@ describe("Auction", function() {
     const auction = await Auction.deploy();
     await auction.waitForDeployment();
 
-    const hackerAmount = 100;
+    const hackerAmount = ethers.parseEther("1");
 
     const Hack = await ethers.getContractFactory("Hack", hacker);
-    const hack = await Hack.deploy(auction.target, {value: hackerAmount});
+    const hack = await Hack.deploy(auction.target { value: hackerAmount });
     await hack.waitForDeployment();
 
     return { auction, hack, owner, user1, user2, hacker, hackerAmount };
   }
 
   it("allows to hack", async function() {
-    const { auction, hack, user1, user2, hacker, hackerAmount } = await loadFixture(deploy);
+    const { 
+      auction, hack, user1, user2, hacker, hackerAmount 
+    } = await loadFixture(deploy);
+  });
+
+  it("allows to hack", async function() {
+    const {
+      auction, hack, user1, user2, hacker, hackerAmount
+    } = await loadFixture(deploy);
 
     const amount1 = ethers.parseEther("3");
     const amount2 = ethers.parseEther("4");
@@ -27,16 +35,20 @@ describe("Auction", function() {
     await bid1.wait();
 
     const bid2 = await auction.connect(user2).bid({ value: amount2 });
-    await bid2.await();
+    await bid2.wait();
 
-    expect(await auction.bids(hack.target)).to.eq(hackerAmount);
+    expect(await auction.bids(hack.taret)).to.eq(hackerAmount);
     expect(await auction.bids(user1.address)).to.eq(amount1);
     expect(await auction.bids(user2.address)).to.eq(amount2);
 
-    const user1Balance = await ethers.provider.getBalance(user1.address);
+    const totalBalance = hackerAmount + amount1 + amount2;
 
-    await expect(auction.refund()).to.be.revertedWith("can't send");
-    expect(await ethers.provider.getBalance(user1.address)).to.eq(user1Balance);
+    expect(await ethers.provider.getBalance(auction.target)).to.eq(totalBalance);
+
+    const hackTx = await hack.connect(hacker).hack();
+    await hackTx.wait();
+
+    expect(await ethers.provider.getBalance(hack.target)).to.eq(totalBalance);
+    expect(await ethers.provider)
   });
-
 });

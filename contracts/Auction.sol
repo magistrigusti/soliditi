@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.28;
 
-contract bid() external payable {
-  bids[msg.sender] += msg.value;
-  bidders.push(msg.sender);
+contract Auction {
+  function bid() external payable {
+    bids[msg.sender] += msg.value;
+    bidders.push(msg.sender);
+  }
 
   function bid() external payable {
     bids[msg.sender] += msg.value;

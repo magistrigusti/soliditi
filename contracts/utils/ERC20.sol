@@ -117,7 +117,15 @@ astract contract ERC20 is IERC20, IERC20Metadata {
   }
 
   function _mint(address account, uint256 value) internal {
-    
+    require(account != address(0));
+
+    _update(address(0), account, value);
+  }
+
+  function _burn(address account, uint256 value) internal {
+    require(account != address(0));
+
+    _update(account, address(0), value);
   }
 
 }

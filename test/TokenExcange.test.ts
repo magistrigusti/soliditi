@@ -36,6 +36,27 @@ describe("TokenEchange", function() {
     const buyTx = await exch.connect(buyer).buy({value: value});
   });
 
+  it("should allow to sell", async function() {
+    const { dom, exch, buyer } = await loadFixture(deploy);
+
+    const ownedTokens = 2n;
+
+    const transferTx = await dom.transfer(buyer.address, await withDecimals(dom, ownedTokens));
+    await transferTx.wait();
+
+    const tokensToSell = 1n;
+    const value = ethers.parseEther(tokensToSell.toString());
+
+    const approveTx = await dom.connect(buyer).approve(exch.target, value);
+    await approveTx.wait();
+
+    const sellTx = await exch.connect(buyer).sell(value);
+    await sellTx.wait();
+
+    await expect(sellTx).to.changeEtherBalances([buyer, exch], [value, -value]);
+    await expect(sellTx).to.changeTokenBalances(dom, [exch, buyer], [value, -value]);
+  });
+
   async function withDecimals(dom: DAODominum, value: bigint): Promise<bigint> {
     return value * 10n ** await dom.decimals();
   }

@@ -1,12 +1,12 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.28;
+// // SPDX-License-Identifier: UNLICENSED
+// pragma solidity ^0.8.28;
 
-import "./utils/IERC20.sol";
+// import "./utils/IERC20.sol";
 
-interface IERC20Metadata is IERC20 {
-  function name() external view returns(string memory);
+// interface IERC20Metadata is IERC20 {
+//   function name() external view returns(string memory);
 
-  function symbol() external view returns(string memory);
+//   function symbol() external view returns(string memory);
 
-  function decimals() external view returns(uint8);
-}
+//   function decimals() external view returns(uint8);
+// }

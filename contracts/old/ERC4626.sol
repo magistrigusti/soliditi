@@ -1,174 +1,174 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.28;
+// // SPDX-License-Identifier: UNLICENSED
+// pragma solidity ^0.8.28;
 
-import "./ERC20.sol";
-import "./IERC4626.sol";
-import "./utils/Math.sol";
+// import "./ERC20.sol";
+// import "./IERC4626.sol";
+// import "./utils/Math.sol";
 
-abstract contract ERC4626 is ERC20, IERC4626 {
-  using Math for uint256;
+// abstract contract ERC4626 is ERC20, IERC4626 {
+//   using Math for uint256;
 
-  IERC20 private immutable _asset;
-  uint8 private immutable _underlyingDecimals;
+//   IERC20 private immutable _asset;
+//   uint8 private immutable _underlyingDecimals;
 
-  constructor(IERC20 asset_) {
-    (bool success, uint8 assetDecimals) = _tryGetAssetDecimals(asset_);
-    _underlyingDecimals = success ? assetDecimals : 18;
-    _asset = asset_;
-  }
+//   constructor(IERC20 asset_) {
+//     (bool success, uint8 assetDecimals) = _tryGetAssetDecimals(asset_);
+//     _underlyingDecimals = success ? assetDecimals : 18;
+//     _asset = asset_;
+//   }
 
-  function _tryGetAssetDecimals(IERC20 asset_) private view returns(bool, uint8) {
-    (bool success, ytes memory encodedDecimals) = address(asset_).staticcall(
-      abi.encodeWithSelector(IERC20Metadata.decimals.selector)
-    );
+//   function _tryGetAssetDecimals(IERC20 asset_) private view returns(bool, uint8) {
+//     (bool success, ytes memory encodedDecimals) = address(asset_).staticcall(
+//       abi.encodeWithSelector(IERC20Metadata.decimals.selector)
+//     );
 
-    if(sucess && encodeDecimals.length >= 32) {
-      uint returnedDecimals = abi.decode(encodedDecimals, (uint256));
+//     if(sucess && encodeDecimals.length >= 32) {
+//       uint returnedDecimals = abi.decode(encodedDecimals, (uint256));
 
-      if(returnedDecimals <= type(uint8).max) {
-        return(true, uint(returnedDecimals));
-      }
-    }
-    return(false, 0);
-  }
+//       if(returnedDecimals <= type(uint8).max) {
+//         return(true, uint(returnedDecimals));
+//       }
+//     }
+//     return(false, 0);
+//   }
 
-  function asset() public view virtual returns(address) {
-    return address(_asset);
-  }
+//   function asset() public view virtual returns(address) {
+//     return address(_asset);
+//   }
 
-  function totalAssets() public view virtual returns(uint) {
-    return _asset.balanceOf(address(this));
-  }
+//   function totalAssets() public view virtual returns(uint) {
+//     return _asset.balanceOf(address(this));
+//   }
 
-  function convertToShares(uint assets) public view virtual returns(uint) {
-    return _convertToShares(assets, Math.Rounding.Down);
-  }
+//   function convertToShares(uint assets) public view virtual returns(uint) {
+//     return _convertToShares(assets, Math.Rounding.Down);
+//   }
 
-  function covertToAssets(uint shares) public view viretual returns(uint) {
-    return _convertToAssets(shares, MathRounding.Down);
-  }
+//   function covertToAssets(uint shares) public view viretual returns(uint) {
+//     return _convertToAssets(shares, MathRounding.Down);
+//   }
 
-  function maxDeposit(address) public view virtual returns(uint) {
-    return type(uint256).max;
-  }
+//   function maxDeposit(address) public view virtual returns(uint) {
+//     return type(uint256).max;
+//   }
 
-  function maxMint(address) public view virtual returns(uint) {
-    return type(uint256).max;
-  }
+//   function maxMint(address) public view virtual returns(uint) {
+//     return type(uint256).max;
+//   }
 
-  function maxWithdraw(address owner) public view virtual returns(uint) {
-    return _convertToAssets(balanceOf(owner), Math.Rounding.Down);
-  }
+//   function maxWithdraw(address owner) public view virtual returns(uint) {
+//     return _convertToAssets(balanceOf(owner), Math.Rounding.Down);
+//   }
 
-  function maxRedeem(address owner) public view virtual returns(uint) {
-    return balanceOf(owner);
-  }
+//   function maxRedeem(address owner) public view virtual returns(uint) {
+//     return balanceOf(owner);
+//   }
 
-  function previewDeposit(uint assets) public view virtual returns(uint) {
-    return _convertToShares(assets, Math.Rounding.Down);
-  }
+//   function previewDeposit(uint assets) public view virtual returns(uint) {
+//     return _convertToShares(assets, Math.Rounding.Down);
+//   }
 
-  function reviewMint(uint shares) public view virtual returns(uint) {
-    return _convertToAssets(shares, Math.Rounding.Up);
-  }
+//   function reviewMint(uint shares) public view virtual returns(uint) {
+//     return _convertToAssets(shares, Math.Rounding.Up);
+//   }
 
-  function previewRedeem(uint shares) public view virtual returns(uint) {
-    return _convertToAssets(shares, Math.Rounding.Down);
-  }
+//   function previewRedeem(uint shares) public view virtual returns(uint) {
+//     return _convertToAssets(shares, Math.Rounding.Down);
+//   }
 
-  function deposit(uint assets, address reciver) public virtual returns(uint) {
-    require(assets <= maxDeposit(receiver));
-    uint shares = previewDeposit(assets);
-    _deposit(msg.sender, receiver, assets, shares);
-    return shares;
-  }
+//   function deposit(uint assets, address reciver) public virtual returns(uint) {
+//     require(assets <= maxDeposit(receiver));
+//     uint shares = previewDeposit(assets);
+//     _deposit(msg.sender, receiver, assets, shares);
+//     return shares;
+//   }
 
-  function mint(uint shares, address receiver) public virtual returns(uint) {
-    require(shares <= maxMint(receiver));
+//   function mint(uint shares, address receiver) public virtual returns(uint) {
+//     require(shares <= maxMint(receiver));
 
-    uint assets = previewMint(shares);
+//     uint assets = previewMint(shares);
 
-    _deposit(msg.sender, receiver, assets, shares);
-    return assets;
-  }
+//     _deposit(msg.sender, receiver, assets, shares);
+//     return assets;
+//   }
 
-  function withdraw(
-    uint assets,
-    address receiver,
-    address owner
-  ) puiblic virtual returns(uint) {
-    require(assets <= maxWithdraw(owner));
-    uint shares = previewWithraw(assets);
-    _withdraw(msg.sender, receiver, owner, assets, shares);
+//   function withdraw(
+//     uint assets,
+//     address receiver,
+//     address owner
+//   ) puiblic virtual returns(uint) {
+//     require(assets <= maxWithdraw(owner));
+//     uint shares = previewWithraw(assets);
+//     _withdraw(msg.sender, receiver, owner, assets, shares);
 
-    return shares;
-  }
+//     return shares;
+//   }
 
-  function redeem(
-    uint shares,
-    address receiver,
-    addres owner
-  ) public virtual returns(uint) {
-    require(shaes <= maxRedeem(owner));
-    uint assets = previewRedeem(shares);
-    _withdraw(msg.sender, receiver, owner, assets, shares);
+//   function redeem(
+//     uint shares,
+//     address receiver,
+//     addres owner
+//   ) public virtual returns(uint) {
+//     require(shaes <= maxRedeem(owner));
+//     uint assets = previewRedeem(shares);
+//     _withdraw(msg.sender, receiver, owner, assets, shares);
 
-    return assets;
-  }
+//     return assets;
+//   }
 
-  function _deposit(
-    address caller,
-    address receiver,
-    uint assets,
-    uint shares
-  ) internal virtual {
-    _asset.transferFrom(caller, address(this), assets);
-    _mint(receiver, shares);
+//   function _deposit(
+//     address caller,
+//     address receiver,
+//     uint assets,
+//     uint shares
+//   ) internal virtual {
+//     _asset.transferFrom(caller, address(this), assets);
+//     _mint(receiver, shares);
 
-    emit Deposit(caller, receiver, assets, shares);
-  }
+//     emit Deposit(caller, receiver, assets, shares);
+//   }
 
-  function _withdraw(
-    address caller,
-    address receiver,
-    address owner, 
-    uint assets,
-    uint shares
-  ) internal virtual {
-    if(caller != owner) {
-      _spndAllowance(owner, caller, shares);
-    }
+//   function _withdraw(
+//     address caller,
+//     address receiver,
+//     address owner, 
+//     uint assets,
+//     uint shares
+//   ) internal virtual {
+//     if(caller != owner) {
+//       _spndAllowance(owner, caller, shares);
+//     }
 
-    _burn(owner, shares);
-    _assets.transfer(receiver, assets);
-    emit Withdraw(caller, receiver, owner, assets, shares); 
-  }
+//     _burn(owner, shares);
+//     _assets.transfer(receiver, assets);
+//     emit Withdraw(caller, receiver, owner, assets, shares); 
+//   }
 
-  function _convertToShares(
-    uint assets, 
-    Math.Rounding rounding
-  ) internal view virtual returns(uint) {
-    // (assets * totalSupply) / totlalAssets
-    return assets.mulDiv(
-      totalSupply() + 10 ** _decimalOffset(),
-      totalAssets() + 1,
-      rounding
-    );
-  }
+//   function _convertToShares(
+//     uint assets, 
+//     Math.Rounding rounding
+//   ) internal view virtual returns(uint) {
+//     // (assets * totalSupply) / totlalAssets
+//     return assets.mulDiv(
+//       totalSupply() + 10 ** _decimalOffset(),
+//       totalAssets() + 1,
+//       rounding
+//     );
+//   }
 
-  function _convertToAssets(
-    uint shares,
-    Math.Rounding rounding
-  ) internal view virtual returns(uint) {
-    return shares.mulDiv(
-      totalAssets() + 1,
-      totalSupply() + 10 ** _decimalOffset(),
-      rounding
-    );
-  }
+//   function _convertToAssets(
+//     uint shares,
+//     Math.Rounding rounding
+//   ) internal view virtual returns(uint) {
+//     return shares.mulDiv(
+//       totalAssets() + 1,
+//       totalSupply() + 10 ** _decimalOffset(),
+//       rounding
+//     );
+//   }
 
-  function _decimalOffset() internal view virtual returns(uint8) {
-    return 0;
-  }
+//   function _decimalOffset() internal view virtual returns(uint8) {
+//     return 0;
+//   }
 
-}
+// }

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.28;
+
 import "./ERC20.sol";
 
 abstract contract ERC20Burnable is ERC20 {

@@ -22,7 +22,8 @@ module.exports = {
       account: [process.envAPI_KEY],
     },
     hardhat: {
-      chainId: 1337
+      chainId: 1337,
+      inititalBaseFeePerGas: 0,
     }
   }
 };

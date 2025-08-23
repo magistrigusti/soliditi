@@ -89,7 +89,7 @@ contract Timelock {
       data = _data;
     }
 
-    (bool success, bytes memory resp) = _to.call{vlue: _value}(data);
+    (bool success, bytes memory resp) = _to.call{value: _value}(data);
 
     require(success, "tx failed!");
 
